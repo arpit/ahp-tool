@@ -28,14 +28,7 @@
     </div>
 
     <div class="main wrapper">
-      <aside>
-        <h3>New to the AHP?</h3>
-        <p>Check out <a href="https://en.wikipedia.org/wiki/Analytic_hierarchy_process" target="_blank">Wikipedia's article on it</a>.</p>
-        <h3>Data Management</h3>
-        <p><button id="datamgmt_reset">Reset</button> - <button id="datamgmt_export">Export</button> - <button id="datamgmt_import">Import</button></p>
-        <p><textarea id="datamgmt"></textarea></p>
-      </aside>
-
+      <div class="main-content">
       <form id="ahpdata" name="ahpdata">
         <section>
           <h1>Your Goal</h1>
@@ -43,27 +36,31 @@
         </section>
         <section id="criteria_inputs">
           <h1>Your Criteria</h1>
-          <p>You can leave some blank, but you cannot have more than 8.</p>
-          <input type="text" id="criteria0" name="criteria0" />
-          <input type="text" id="criteria1" name="criteria1" />
-          <input type="text" id="criteria2" name="criteria2" />
-          <input type="text" id="criteria3" name="criteria3" />
-          <input type="text" id="criteria4" name="criteria4" />
-          <input type="text" id="criteria5" name="criteria5" />
-          <input type="text" id="criteria6" name="criteria6" />
-          <input type="text" id="criteria7" name="criteria7" />
+          <p>Add up to 8 things you care about when making this decision.</p>
+          <div class="tag-input" id="criteria_taginput">
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="criteria0_enabled" data-index="0" checked aria-label="Include in evaluation" /><input type="text" id="criteria0" name="criteria0" /><button type="button" class="tag-edit" data-index="0" aria-label="Edit criterion">&#9998;</button><button type="button" class="tag-remove" data-index="0" aria-label="Remove criterion">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="criteria1_enabled" data-index="1" checked aria-label="Include in evaluation" /><input type="text" id="criteria1" name="criteria1" /><button type="button" class="tag-edit" data-index="1" aria-label="Edit criterion">&#9998;</button><button type="button" class="tag-remove" data-index="1" aria-label="Remove criterion">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="criteria2_enabled" data-index="2" checked aria-label="Include in evaluation" /><input type="text" id="criteria2" name="criteria2" /><button type="button" class="tag-edit" data-index="2" aria-label="Edit criterion">&#9998;</button><button type="button" class="tag-remove" data-index="2" aria-label="Remove criterion">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="criteria3_enabled" data-index="3" checked aria-label="Include in evaluation" /><input type="text" id="criteria3" name="criteria3" /><button type="button" class="tag-edit" data-index="3" aria-label="Edit criterion">&#9998;</button><button type="button" class="tag-remove" data-index="3" aria-label="Remove criterion">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="criteria4_enabled" data-index="4" checked aria-label="Include in evaluation" /><input type="text" id="criteria4" name="criteria4" /><button type="button" class="tag-edit" data-index="4" aria-label="Edit criterion">&#9998;</button><button type="button" class="tag-remove" data-index="4" aria-label="Remove criterion">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="criteria5_enabled" data-index="5" checked aria-label="Include in evaluation" /><input type="text" id="criteria5" name="criteria5" /><button type="button" class="tag-edit" data-index="5" aria-label="Edit criterion">&#9998;</button><button type="button" class="tag-remove" data-index="5" aria-label="Remove criterion">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="criteria6_enabled" data-index="6" checked aria-label="Include in evaluation" /><input type="text" id="criteria6" name="criteria6" /><button type="button" class="tag-edit" data-index="6" aria-label="Edit criterion">&#9998;</button><button type="button" class="tag-remove" data-index="6" aria-label="Remove criterion">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="criteria7_enabled" data-index="7" checked aria-label="Include in evaluation" /><input type="text" id="criteria7" name="criteria7" /><button type="button" class="tag-edit" data-index="7" aria-label="Edit criterion">&#9998;</button><button type="button" class="tag-remove" data-index="7" aria-label="Remove criterion">&times;</button></span>
+          </div>
         </section>
         <section id="items_inputs">
           <h1>Your Options (Alternatives)</h1>
-          <p>You can leave some blank, but you cannot have more than 8.</p>
-          <input type="text" id="item0" name="item0" />
-          <input type="text" id="item1" name="item1" />
-          <input type="text" id="item2" name="item2" />
-          <input type="text" id="item3" name="item3" />
-          <input type="text" id="item4" name="item4" />
-          <input type="text" id="item5" name="item5" />
-          <input type="text" id="item6" name="item6" />
-          <input type="text" id="item7" name="item7" />
+          <p>Add up to 8 options you're deciding between.</p>
+          <div class="tag-input" id="items_taginput">
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="item0_enabled" data-index="0" checked aria-label="Include in evaluation" /><input type="text" id="item0" name="item0" /><button type="button" class="tag-edit" data-index="0" aria-label="Edit option">&#9998;</button><button type="button" class="tag-remove" data-index="0" aria-label="Remove option">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="item1_enabled" data-index="1" checked aria-label="Include in evaluation" /><input type="text" id="item1" name="item1" /><button type="button" class="tag-edit" data-index="1" aria-label="Edit option">&#9998;</button><button type="button" class="tag-remove" data-index="1" aria-label="Remove option">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="item2_enabled" data-index="2" checked aria-label="Include in evaluation" /><input type="text" id="item2" name="item2" /><button type="button" class="tag-edit" data-index="2" aria-label="Edit option">&#9998;</button><button type="button" class="tag-remove" data-index="2" aria-label="Remove option">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="item3_enabled" data-index="3" checked aria-label="Include in evaluation" /><input type="text" id="item3" name="item3" /><button type="button" class="tag-edit" data-index="3" aria-label="Edit option">&#9998;</button><button type="button" class="tag-remove" data-index="3" aria-label="Remove option">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="item4_enabled" data-index="4" checked aria-label="Include in evaluation" /><input type="text" id="item4" name="item4" /><button type="button" class="tag-edit" data-index="4" aria-label="Edit option">&#9998;</button><button type="button" class="tag-remove" data-index="4" aria-label="Remove option">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="item5_enabled" data-index="5" checked aria-label="Include in evaluation" /><input type="text" id="item5" name="item5" /><button type="button" class="tag-edit" data-index="5" aria-label="Edit option">&#9998;</button><button type="button" class="tag-remove" data-index="5" aria-label="Remove option">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="item6_enabled" data-index="6" checked aria-label="Include in evaluation" /><input type="text" id="item6" name="item6" /><button type="button" class="tag-edit" data-index="6" aria-label="Edit option">&#9998;</button><button type="button" class="tag-remove" data-index="6" aria-label="Remove option">&times;</button></span>
+            <span class="tag-item"><input type="checkbox" class="tag-enable" id="item7_enabled" data-index="7" checked aria-label="Include in evaluation" /><input type="text" id="item7" name="item7" /><button type="button" class="tag-edit" data-index="7" aria-label="Edit option">&#9998;</button><button type="button" class="tag-remove" data-index="7" aria-label="Remove option">&times;</button></span>
+          </div>
         </section>
 
         <section id="pairwise_criteria" class="pairwise_criteria pairwisetable">
@@ -1074,6 +1071,15 @@
         <h2>Scored Options (Alternatives)</h2>
         <div class="ct-chart ct-double-octave" id="rankings"></div>
       </section>
+      </div> <!-- .main-content -->
+
+      <aside>
+        <h3>New to the AHP?</h3>
+        <p>Check out <a href="https://en.wikipedia.org/wiki/Analytic_hierarchy_process" target="_blank">Wikipedia's article on it</a>.</p>
+        <h3>Data Management</h3>
+        <p><button id="datamgmt_reset">Reset</button> - <button id="datamgmt_export">Export</button> - <button id="datamgmt_import">Import</button></p>
+        <p><textarea id="datamgmt"></textarea></p>
+      </aside>
     </div> <!-- #main -->
 
     <div class="footer-container">

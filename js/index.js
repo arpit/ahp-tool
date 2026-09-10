@@ -1,6 +1,6 @@
 const goalInput = document.getElementById("goal");
-const criteriaInputs = document.querySelectorAll('#criteria_inputs > input');
-const itemInputs = document.querySelectorAll('#items_inputs > input');
+const criteriaInputs = document.querySelectorAll('#criteria_taginput input[type="text"]');
+const itemInputs = document.querySelectorAll('#items_taginput input[type="text"]');
 const pairwiseInputs = document.querySelectorAll('.pairwisetable input');
 
 let updateCriteriaTable = function(input) {
@@ -11,16 +11,9 @@ let updateCriteriaTable = function(input) {
     heading.innerHTML = value;
   });
 
-  let activeClass = 'active_' + input.target.id.replace('criteria', 'crit');
-
-  if (value) {
-    document.getElementById('pairwise_criteria').classList.add(activeClass);
-    document.getElementById('pairwise_items').classList.add(activeClass);
-  } else {
-    document.getElementById('pairwise_criteria').classList.remove(activeClass);
-    document.getElementById('pairwise_items').classList.remove(activeClass);
-  }
   saveInputValue(input.target)
+  updateCriteriaActiveClass(getIndexFromId(input.target.id));
+  refreshCriteriaVisibility();
 }
 
 let updateItemTables = function(input) {
@@ -31,15 +24,299 @@ let updateItemTables = function(input) {
     heading.innerHTML = value;
   });
 
-  let activeClass = 'active_' + input.target.id;
-
-  if (value) {
-    document.getElementById('pairwise_items').classList.add(activeClass);
-  } else {
-    document.getElementById('pairwise_items').classList.remove(activeClass);
-  }
   saveInputValue(input.target)
+  updateItemActiveClass(getIndexFromId(input.target.id));
+  refreshItemVisibility();
 }
+
+/* Begin Enable / Disable (checkbox toggles whether a criterion/option counts) */
+
+let getIndexFromId = function(id) {
+  return parseInt(id.replace(/^\D+/, ''), 10);
+}
+
+let isCriteriaEnabled = function(idx) {
+  let box = document.getElementById('criteria' + idx + '_enabled');
+  return !box || box.checked;
+}
+
+let isItemEnabled = function(idx) {
+  let box = document.getElementById('item' + idx + '_enabled');
+  return !box || box.checked;
+}
+
+let updateCriteriaActiveClass = function(idx) {
+  let input = document.getElementById('criteria' + idx);
+  let activeClass = 'active_crit' + idx;
+  let shouldBeActive = !!input.value && isCriteriaEnabled(idx);
+  document.getElementById('pairwise_criteria').classList.toggle(activeClass, shouldBeActive);
+  document.getElementById('pairwise_items').classList.toggle(activeClass, shouldBeActive);
+}
+
+let updateItemActiveClass = function(idx) {
+  let input = document.getElementById('item' + idx);
+  let activeClass = 'active_item' + idx;
+  let shouldBeActive = !!input.value && isItemEnabled(idx);
+  document.getElementById('pairwise_items').classList.toggle(activeClass, shouldBeActive);
+}
+
+let saveEnabledState = function(prefix, idx) {
+  let box = document.getElementById(prefix + idx + '_enabled');
+  let key = 'ahp.' + prefix + idx + '.enabled';
+  if (box.checked) {
+    localStorage.removeItem(key); // enabled is the default; only persist the exception
+  } else {
+    localStorage.setItem(key, '0');
+  }
+}
+
+let loadEnabledState = function(prefix, idx) {
+  let box = document.getElementById(prefix + idx + '_enabled');
+  box.checked = localStorage.getItem('ahp.' + prefix + idx + '.enabled') !== '0';
+}
+
+let bindEnableCheckbox = function(box, prefix) {
+  box.addEventListener('change', function() {
+    let idx = parseInt(box.dataset.index, 10);
+    let tagItem = box.closest('.tag-item');
+    tagItem.classList.toggle('is-disabled', !box.checked);
+    saveEnabledState(prefix, idx);
+    if (prefix === 'criteria') {
+      updateCriteriaActiveClass(idx);
+    } else {
+      updateItemActiveClass(idx);
+    }
+  });
+}
+
+/* End Enable / Disable */
+
+/* Begin Tag Input (add/remove criteria & options as chips) */
+
+let getCriteriaCount = function() {
+  let n = 0;
+  while (n < 8 && document.getElementById('criteria' + n).value) n++;
+  return n;
+}
+
+let getItemCount = function() {
+  let n = 0;
+  while (n < 8 && document.getElementById('item' + n).value) n++;
+  return n;
+}
+
+let refreshTagGroup = function(prefix, count, placeholder) {
+  for (let i = 0; i < 8; i++) {
+    let input = document.getElementById(prefix + i);
+    let tagItem = input.closest('.tag-item');
+    let checkbox = tagItem.querySelector('.tag-enable');
+    let editBtn = tagItem.querySelector('.tag-edit');
+    let removeBtn = tagItem.querySelector('.tag-remove');
+
+    if (i < count) {
+      tagItem.classList.remove('is-hidden');
+      tagItem.classList.add('is-chip');
+      tagItem.classList.toggle('is-disabled', !checkbox.checked);
+      editBtn.classList.remove('is-hidden');
+      removeBtn.classList.remove('is-hidden');
+      input.placeholder = '';
+    } else if (i === count) {
+      tagItem.classList.remove('is-hidden');
+      tagItem.classList.remove('is-chip');
+      tagItem.classList.remove('is-disabled');
+      editBtn.classList.add('is-hidden');
+      removeBtn.classList.add('is-hidden');
+      input.placeholder = placeholder;
+    } else {
+      tagItem.classList.add('is-hidden');
+    }
+
+    input.size = Math.max((input.value || input.placeholder || '').length, 6);
+  }
+}
+
+let refreshCriteriaVisibility = function() {
+  refreshTagGroup('criteria', getCriteriaCount(), '+ Add criterion');
+}
+
+let refreshItemVisibility = function() {
+  refreshTagGroup('item', getItemCount(), '+ Add option');
+}
+
+// Compacts an n x n matrix of <input> cells by removing row/column k and
+// shifting everything after it up/left by one; the vacated last row/column
+// is reset back to the blank template (diagonal = 1, everything else empty).
+let compactMatrix = function(n, k, getCell, setCell) {
+  if (k < 0 || k >= n) return;
+
+  let order = [];
+  for (let i = 0; i < n; i++) {
+    if (i !== k) order.push(i);
+  }
+
+  let compacted = order.map(function(row) {
+    return order.map(function(col) {
+      return getCell(row, col);
+    });
+  });
+
+  for (let i = 0; i < order.length; i++) {
+    for (let j = 0; j < order.length; j++) {
+      setCell(i, j, compacted[i][j]);
+    }
+  }
+
+  let last = n - 1;
+  for (let j = 0; j < n; j++) {
+    setCell(last, j, j === last ? '1' : '');
+    setCell(j, last, j === last ? '1' : '');
+  }
+}
+
+let copyItemSection = function(fromIdx, toIdx) {
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      document.getElementById('c' + toIdx + '_item' + r + 'v' + c).value =
+        document.getElementById('c' + fromIdx + '_item' + r + 'v' + c).value;
+    }
+  }
+}
+
+let resetItemSection = function(idx) {
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      document.getElementById('c' + idx + '_item' + r + 'v' + c).value = (r === c) ? '1' : '';
+    }
+  }
+}
+
+let persistAllPairwiseCells = function() {
+  document.querySelectorAll('.pairwisetable input[type="text"]').forEach(saveInputValue);
+  criteriaInputs.forEach(saveInputValue);
+  itemInputs.forEach(saveInputValue);
+}
+
+let removeCriteria = function(k) {
+  let n = getCriteriaCount();
+  if (k < 0 || k >= n) return;
+
+  compactMatrix(n, k,
+    function(r, c) { return document.getElementById('criteria' + r + 'v' + c).value; },
+    function(r, c, v) { document.getElementById('criteria' + r + 'v' + c).value = v; }
+  );
+
+  for (let i = k; i < n - 1; i++) {
+    copyItemSection(i + 1, i);
+  }
+  resetItemSection(n - 1);
+
+  for (let i = k; i < n - 1; i++) {
+    document.getElementById('criteria' + i).value = document.getElementById('criteria' + (i + 1)).value;
+    document.getElementById('criteria' + i + '_enabled').checked = document.getElementById('criteria' + (i + 1) + '_enabled').checked;
+  }
+  document.getElementById('criteria' + (n - 1)).value = '';
+  document.getElementById('criteria' + (n - 1) + '_enabled').checked = true;
+
+  for (let i = k; i < n; i++) {
+    updateCriteriaTable({ target: document.getElementById('criteria' + i), type: 'blur' });
+    saveEnabledState('criteria', i);
+  }
+
+  persistAllPairwiseCells();
+  clearPairwiseStyleClasses();
+}
+
+let removeItem = function(m) {
+  let n = getItemCount();
+  if (m < 0 || m >= n) return;
+
+  for (let g = 0; g < 8; g++) {
+    compactMatrix(n, m,
+      function(r, c) { return document.getElementById('c' + g + '_item' + r + 'v' + c).value; },
+      function(r, c, v) { document.getElementById('c' + g + '_item' + r + 'v' + c).value = v; }
+    );
+  }
+
+  for (let i = m; i < n - 1; i++) {
+    document.getElementById('item' + i).value = document.getElementById('item' + (i + 1)).value;
+    document.getElementById('item' + i + '_enabled').checked = document.getElementById('item' + (i + 1) + '_enabled').checked;
+  }
+  document.getElementById('item' + (n - 1)).value = '';
+  document.getElementById('item' + (n - 1) + '_enabled').checked = true;
+
+  for (let i = m; i < n; i++) {
+    updateItemTables({ target: document.getElementById('item' + i), type: 'blur' });
+    saveEnabledState('item', i);
+  }
+
+  persistAllPairwiseCells();
+  clearPairwiseStyleClasses();
+}
+
+let bindTagInput = function(input, prefix) {
+  input.addEventListener('input', function() {
+    input.size = Math.max(input.value.length, 6);
+  });
+  input.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      let idx = parseInt(input.id.replace(prefix, ''), 10);
+      input.blur();
+      let next = document.getElementById(prefix + (idx + 1));
+      if (next) {
+        setTimeout(function() { next.focus(); }, 0);
+      }
+    }
+  });
+}
+
+let editTagViaPrompt = function(prefix, idx, label) {
+  let input = document.getElementById(prefix + idx);
+  let newValue = window.prompt('Edit ' + label, input.value);
+  if (newValue === null) return; // cancelled
+
+  newValue = newValue.trim();
+  if (!newValue) return; // ignore blanking out via prompt; use the remove button instead
+
+  input.value = newValue;
+  input.dispatchEvent(new Event('blur', { bubbles: true }));
+}
+
+document.querySelectorAll('#criteria_taginput .tag-edit').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    editTagViaPrompt('criteria', parseInt(btn.dataset.index, 10), 'criterion');
+  });
+});
+
+document.querySelectorAll('#items_taginput .tag-edit').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    editTagViaPrompt('item', parseInt(btn.dataset.index, 10), 'option');
+  });
+});
+
+document.querySelectorAll('#criteria_taginput .tag-remove').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    removeCriteria(parseInt(btn.dataset.index, 10));
+    refreshCriteriaVisibility();
+  });
+});
+
+document.querySelectorAll('#items_taginput .tag-remove').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    removeItem(parseInt(btn.dataset.index, 10));
+    refreshItemVisibility();
+  });
+});
+
+document.querySelectorAll('#criteria_taginput .tag-enable').forEach(function(box) {
+  bindEnableCheckbox(box, 'criteria');
+});
+
+document.querySelectorAll('#items_taginput .tag-enable').forEach(function(box) {
+  bindEnableCheckbox(box, 'item');
+});
+
+/* End Tag Input */
 
 let getRelatedInputId = function(activeInputId) {
   let type = activeInputId.substring(0, activeInputId.length-3);
@@ -268,18 +545,27 @@ goalInput.addEventListener('blur', function(event) {
 });
 
 criteriaInputs.forEach(function(input) {
+  let idx = getIndexFromId(input.id);
+  loadEnabledState('criteria', idx);
   input.addEventListener('blur', updateCriteriaTable);
+  bindTagInput(input, 'criteria');
   if ( loadInputValue(input) ) {
     updateCriteriaTable({'target':input, 'type':'blur'});
   }
 });
 
 itemInputs.forEach(function(input) {
+  let idx = getIndexFromId(input.id);
+  loadEnabledState('item', idx);
   input.addEventListener('blur', updateItemTables);
+  bindTagInput(input, 'item');
   if ( loadInputValue(input) ) {
     updateItemTables({'target':input, 'type':'blur'});
   }
 });
+
+refreshCriteriaVisibility();
+refreshItemVisibility();
 
 pairwiseInputs.forEach(function(input) {
   input.addEventListener('keyup', handlePair);
@@ -345,21 +631,38 @@ let runAHP = function(event) {
   let criteriaItemRank = {};
   let criteriaRank = [];
 
-  itemInputs.forEach(function(input) {
-    if(input.value) {
-      items.push(input.value);
-    }
-  });
+  // Only criteria/options that have a label AND are checked "in" count toward
+  // the evaluation. Their DOM slot indexes (0-7) are not necessarily
+  // contiguous once some are unchecked, so we track both the raw slot index
+  // and its compacted position among the active set.
+  let criteriaActiveIdx = [];
+  let itemActiveIdx = [];
 
-  criteriaInputs.forEach(function(input) {
-    if(input.value) {
+  for (let i = 0; i < 8; i++) {
+    let input = document.getElementById('criteria' + i);
+    if (input.value && isCriteriaEnabled(i)) {
       criteria.push(safeName(input.value));
       criteriaItemRank[safeName(input.value)] = [];
+      criteriaActiveIdx.push(i);
     }
-  });
+  }
+
+  for (let i = 0; i < 8; i++) {
+    let input = document.getElementById('item' + i);
+    if (input.value && isItemEnabled(i)) {
+      items.push(input.value);
+      itemActiveIdx.push(i);
+    }
+  }
 
   let itemTotalCheck = items.length;
   let criteriaTotalCheck = criteria.length;
+
+  let criteriaIndexToPos = {};
+  criteriaActiveIdx.forEach(function(idx, pos) { criteriaIndexToPos[idx] = pos; });
+
+  let itemIndexToPos = {};
+  itemActiveIdx.forEach(function(idx, pos) { itemIndexToPos[idx] = pos; });
 
   let getPairwiseItemInputCriteriaGroupIndex = function(id) {
     // c0_item2v0
@@ -367,21 +670,21 @@ let runAHP = function(event) {
   };
 
   let getCriteriaKeyNameFromId = function(id) {
-    return criteria[getPairwiseItemInputCriteriaGroupIndex(id)];
+    return criteria[criteriaIndexToPos[getPairwiseItemInputCriteriaGroupIndex(id)]];
   };
 
   let isRowVisible = function(input) {
-    let total = inputIsCriteria(input) ? criteriaTotalCheck : itemTotalCheck;
-    return getPairwiseInputRow(input.id) < total;
+    let idxSet = inputIsCriteria(input) ? criteriaActiveIdx : itemActiveIdx;
+    return idxSet.indexOf(getPairwiseInputRow(input.id)) !== -1;
   }
 
   let isColumnVisible = function(input) {
-    let total = inputIsCriteria(input) ? criteriaTotalCheck : itemTotalCheck;
-    return getPairwiseInputColumn(input.id) < total;
+    let idxSet = inputIsCriteria(input) ? criteriaActiveIdx : itemActiveIdx;
+    return idxSet.indexOf(getPairwiseInputColumn(input.id)) !== -1;
   }
 
   let isCriteriaGroupVisible = function(input) {
-    return getPairwiseItemInputCriteriaGroupIndex(input.id) < criteriaTotalCheck;
+    return criteriaActiveIdx.indexOf(getPairwiseItemInputCriteriaGroupIndex(input.id)) !== -1;
   }
 
   let isValueTruthy = function(input) {
@@ -393,7 +696,7 @@ let runAHP = function(event) {
     const value = eval(input.value); // ooh the hacks to make a fraction string a number!!!
     const id = input.id;
     const groupKey = getCriteriaKeyNameFromId(id);
-    const rowIndex = getPairwiseInputRow(id);
+    const rowIndex = itemIndexToPos[getPairwiseInputRow(id)];
 
     if(!criteriaItemRank[groupKey]) {
       // group does not exits, so create it
@@ -413,20 +716,21 @@ let runAHP = function(event) {
     }
   });
 
-  let tempCriteriaRow = [];
+  let criteriaRankRows = {};
 
   document.querySelectorAll('#pairwise_criteria input').forEach(function(input) {
-    if(isRowVisible(input)) {
-      if(getPairwiseInputColumn(input.id) === 0 && getPairwiseInputRow(input.id) !== 0) {
-        criteriaRank.push(tempCriteriaRow);
-        tempCriteriaRow = [];
+    if (isRowVisible(input) && isColumnVisible(input) && isValueTruthy(input)) {
+      let rowPos = criteriaIndexToPos[getPairwiseInputRow(input.id)];
+      if (!criteriaRankRows[rowPos]) {
+        criteriaRankRows[rowPos] = [];
       }
-      if(isValueTruthy(input) && isColumnVisible(input)) {
-        tempCriteriaRow.push(eval(input.value)); // ooh the hacks to make a fraction string a number!!!
-      }
+      criteriaRankRows[rowPos].push(eval(input.value)); // ooh the hacks to make a fraction string a number!!!
     }
   });
-  criteriaRank.push(tempCriteriaRow);
+
+  for (let pos = 0; pos < criteriaTotalCheck; pos++) {
+    criteriaRank.push(criteriaRankRows[pos] || []);
+  }
 
   let applyTotalCriteriaClassName = function() {
     const criteriaContainer = document.getElementById('criteria');

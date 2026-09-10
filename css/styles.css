@@ -1,23 +1,47 @@
-/*! Started from HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
+/*! AHP Tool — modern theme */
+
+:root {
+  --color-bg: #f6f9fc;
+  --color-surface: #ffffff;
+  --color-border: #e3e8ee;
+  --color-text: #1a1f36;
+  --color-text-muted: #697386;
+  --color-primary: #635bff;
+  --color-primary-dark: #4f46e5;
+  --color-primary-light: #f0eefe;
+  --color-accent: #06b6d4;
+  --color-winner: #16a34a;
+  --color-winner-bg: #dcfce7;
+  --color-loser: #dc2626;
+  --color-loser-bg: #fee2e2;
+  --color-equal-bg: #cffafe;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgba(26, 31, 54, 0.05), 0 1px 1px rgba(26, 31, 54, 0.04);
+  --shadow-md: 0 2px 8px rgba(26, 31, 54, 0.08);
+  --shadow-lg: 0 8px 24px rgba(26, 31, 54, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
 
 html {
-  color: #222;
+  color: var(--color-text);
   font-size: 1em;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 body {
   margin: 0;
-}
-
-::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
+  background: var(--color-bg);
+  font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 ::selection {
-  background: #b3d4fc;
-  text-shadow: none;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
 }
 
 fieldset {
@@ -26,136 +50,240 @@ fieldset {
   padding: 0;
 }
 
-/* ===== Initializr Styles ==================================================
-   Author: Jonathan Verrecchia - verekia.com/initializr/responsive-template
-   ========================================================================== */
-
-body {
-  font: 16px/26px Helvetica, Helvetica Neue, Arial;
-}
-
 .wrapper {
-  width: 90%;
+  width: 92%;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
 /* ===================
-  ALL: Orange Theme
+   Header / Footer
    =================== */
 
 .header-container {
-  border-bottom: 20px solid #e44d26;
-}
-
-.footer-container,
-.main > aside {
-  border-top: 20px solid #e44d26;
-}
-
-.header-container,
-.footer-container,
-.main > aside {
-  background: #f16529;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
 header h1 {
-  color: white;
+  color: var(--color-text);
   margin: 0;
   padding: 1em 0;
+  font-size: 1.25em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
-/* ==============
-  MOBILE: Main
-   ============== */
-
-.main {
-  padding: 30px 0;
-}
-
-.main section h1 {
-  font-size: 2em;
-}
-
-.main > aside {
-  color: white;
-  padding: 0px 5% 10px;
+.footer-container {
+  margin-top: 3em;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .footer-container footer {
-  color: white;
-  padding: 20px 0;
+  padding: 1.6em 0;
+  color: var(--color-text-muted);
+  font-size: 0.9em;
 }
 
-.main > aside a,
+.footer-container footer h3 {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.main > aside a {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .footer-container footer a {
-  color: #ffc;
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.main > aside a:hover,
+.footer-container footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==============
+   Main layout
+   ============== */
+
+.main {
+  display: flex;
+  align-items: flex-start;
+  gap: 3em;
+  padding: 2em 0 3em;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.main > aside {
+  flex: 0 0 220px;
+  width: 220px;
+  color: var(--color-text-muted);
+  font-size: 0.9em;
+}
+
+.main > aside h3 {
+  color: var(--color-text-muted);
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.main > aside p {
+  margin: 0 0 1.2em;
+}
+
+.main section h1 {
+  font-size: 1.3em;
 }
 
 /* ==========================================================================
-   Author's custom styles
+   Typography
    ========================================================================== */
 
 h1 {
-  color: #e44d26;
+  color: var(--color-text);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 h2 {
-  color: #f16529;
-  border-top: 1px solid #f16529;
-  margin-bottom: 0;
-  padding: 0.5em 0;
+  color: var(--color-text);
+  border-top: none;
+  border-bottom: 2px solid var(--color-primary-light);
+  margin: 0 0 1em;
+  padding: 0 0 0.5em;
+  font-size: 1.15em;
+  font-weight: 600;
 }
 
 h3 {
-  height: 1.2em;
-  font-size: 1.2em;
-  font-weight: bold;
+  height: auto;
+  font-size: 1.05em;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 0.4em;
 }
 
 aside h3 {
-  margin-bottom: -0.25em;
+  margin-bottom: 0.3em;
+}
+
+aside h3:not(:first-child) {
+  margin-top: 1.2em;
 }
 
 form#ahpdata aside {
-  height: 1.2em;
-  font-size: 1.2em;
-  margin: -0.5em 0 0.5em;
+  height: auto;
+  font-size: 0.95em;
+  color: var(--color-text-muted);
+  margin: -0.5em 0 1em;
 }
 
 small {
   padding-left: 1em;
-  color: #777;
+  color: var(--color-text-muted);
 }
+
+/* ==========================================================================
+   Cards for each section
+   ========================================================================== */
+
+form#ahpdata > section,
+#results {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.6em 1.8em;
+  margin-bottom: 1.6em;
+}
+
+.pairwise_items > .c0_items,
+.pairwise_items > .c1_items,
+.pairwise_items > .c2_items,
+.pairwise_items > .c3_items,
+.pairwise_items > .c4_items,
+.pairwise_items > .c5_items,
+.pairwise_items > .c6_items,
+.pairwise_items > .c7_items {
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.2em 1.4em;
+  margin-top: 1em;
+}
+
+form#ahpdata > section:last-of-type {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0.5em 0;
+  text-align: center;
+}
+
+/* ==========================================================================
+   Form controls
+   ========================================================================== */
 
 textarea#goal {
   width: 100%;
-  min-height: 175px;
-  padding: 0.5em;
+  min-height: 120px;
+  padding: 0.7em 0.9em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 1.4em;
+  font-family: inherit;
+  color: var(--color-text);
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-textarea#goal, input[type="text"] {
-  font-size: 36px;
+input[type="text"] {
+  font-size: 1rem;
   box-sizing: border-box;
 }
 
-table {
-  border-spacing: 0;
-  margin-bottom: 70px;
-  margin-top: 35px;
-}
-
-td, th {
-  padding: 5px;
+textarea#goal:focus,
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 
 input[type="text"] {
   display: block;
   width: 100%;
-  margin: 0 0 0.5em;
+  margin: 0 0 0.6em;
+  padding: 0.55em 0.7em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="text"]:read-only {
+  background: var(--color-bg);
+  color: var(--color-text-muted);
 }
 
 .pairwisetable input[type="text"] {
   margin: 0;
+  text-align: center;
+  border-radius: var(--radius-sm);
 }
 
 td input {
@@ -164,34 +292,267 @@ td input {
   margin: 0;
 }
 
+/* ==========================================================================
+   Tag input (add criteria / options as chips, Stripe-style)
+   ========================================================================== */
+
+#criteria_inputs p,
+#items_inputs p {
+  color: var(--color-text-muted);
+  font-size: 0.92em;
+  margin: 0 0 1em;
+}
+
+.tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tag-input:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.tag-item {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.tag-item.is-hidden {
+  display: none;
+}
+
+.tag-input input[type="text"] {
+  display: inline-block;
+  width: auto;
+  min-width: 2ch;
+  margin: 0;
+  padding: 0.45em 0.7em;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  font-size: 0.95em;
+  color: var(--color-text);
+}
+
+.tag-input input[type="text"]::placeholder {
+  color: var(--color-text-muted);
+}
+
+.tag-input input[type="text"]:focus {
+  box-shadow: none;
+  border-color: var(--color-border);
+  background: var(--color-bg);
+}
+
+/* Chip mode: a single rounded pill with checkbox, label, edit & remove segments */
+
+.tag-item.is-chip {
+  align-items: center;
+  background: var(--color-primary-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.tag-item.is-chip input[type="text"] {
+  background: transparent;
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  border-radius: 0;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+}
+
+.tag-item.is-chip input[type="text"]:focus {
+  background: transparent;
+  border-color: transparent;
+}
+
+.tag-enable {
+  display: none;
+  flex-shrink: 0;
+  margin: 0 0 0 0.7em;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.tag-item.is-chip .tag-enable {
+  display: inline-block;
+}
+
+.tag-edit,
+.tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8em;
+  align-self: stretch;
+  border: none;
+  border-left: 1px solid rgba(26, 31, 54, 0.08);
+  background: transparent;
+  color: var(--color-primary-dark);
+  font-size: 0.85em;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: none;
+  opacity: 0.7;
+  transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.tag-remove {
+  font-size: 0.95em;
+}
+
+.tag-edit:hover {
+  background: rgba(26, 31, 54, 0.06);
+  opacity: 1;
+}
+
+.tag-remove:hover {
+  background: var(--color-loser-bg);
+  color: var(--color-loser);
+  opacity: 1;
+}
+
+.tag-edit.is-hidden,
+.tag-remove.is-hidden {
+  display: none;
+}
+
+/* Disabled (unchecked) chips: excluded from the evaluation */
+
+.tag-item.is-disabled {
+  background: var(--color-bg);
+}
+
+.tag-item.is-disabled input[type="text"] {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  text-decoration-color: rgba(105, 115, 134, 0.5);
+}
+
+.tag-item.is-disabled .tag-edit,
+.tag-item.is-disabled .tag-remove {
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+table {
+  border-spacing: 0;
+  margin-bottom: 1.5em;
+  margin-top: 1em;
+  width: 100%;
+}
+
+td, th {
+  padding: 0.4em 0.5em;
+}
+
+thead th {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 2px solid var(--color-border);
+}
+
+tbody th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text);
+  padding-right: 1em;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--color-border);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
 button {
-  font-size: 60px;
-  padding: 0.5em;
+  font-size: 1em;
+  padding: 0.7em 1.4em;
+  font-family: inherit;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+button:hover {
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-md);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+#calcbtn {
+  font-size: 1.15em;
+  padding: 0.75em 2.2em;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
 }
 
 aside button {
-  font-size: 1em;
-  padding: 6px;
-  text-transform: uppercase;
+  font-size: 0.8em;
+  padding: 0.4em 0.7em;
+  text-transform: none;
   cursor: pointer;
-  border-radius: 8px;
-  background-color: #e44d26;
-  color: #ffc;
-  border: 2px solid #f08875;
-  border-color: #f08875 #7f2b22 #7f2b22 #f08875
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+
+aside button:hover {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: none;
 }
 
 aside button:focus {
-  background-color: #dd2d18;
+  background-color: var(--color-bg);
 }
 
 textarea#datamgmt {
-  font-size: small;
-  font-family: 'Courier New', Courier, monospace;
-  border: none;
+  font-size: 0.78em;
+  font-family: 'SF Mono', 'Courier New', Courier, monospace;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   width: 100%;
-  height: 10em;
-  background-color: #f3f3e5;
+  height: 7em;
+  padding: 0.6em;
+  background-color: var(--color-bg);
+  color: var(--color-text-muted);
 }
 
 /* ==========================================================================
@@ -289,14 +650,14 @@ th.winner::after,
 }
 
 th.winner::after {
-  top: -1.5em;
+  top: -1.6em;
   left: 50%;
   margin-left: -0.5em;
 }
 
 .winner th::after {
   top: 50%;
-  left: -1.3em;
+  left: -1.4em;
   margin-top: -0.8em;
 }
 
@@ -304,33 +665,33 @@ th.winner::after {
 .winner td,
 td.winner,
 th.winner {
-  background-color: #c1ffbc;
+  background-color: var(--color-winner-bg);
 }
 
 .loser th,
 .loser td,
 td.loser,
 th.loser {
-  background-color: #ffd4d5;
+  background-color: var(--color-loser-bg);
 }
 
 .equal_weight th,
 .equal_weight td,
 td.equal_weight,
 th.equal_weight {
-  background-color: #B7FFFF;
+  background-color: var(--color-equal-bg);
 }
 
 tr.winner td.loser,
 tr.loser td.winner {
   /* intersection of winner + loser, i.e. the active input */
-  background-color: #c1d49d;
+  background-color: #bcd9a8;
 }
 
 input:active,
 input:focus,
 input.related {
-  background-color: #ffc;
+  background-color: #fef9c3;
 }
 
 /* ==========================================================================
@@ -338,27 +699,27 @@ input.related {
    ========================================================================== */
 
 .ct-label {
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  color: var(--color-text);
   width: 100px;
 }
 
 .ct-bar {
   /* The width of your bars */
-  stroke-width: 40px;
+  stroke-width: 32px;
 }
 
 /*
   Default Stroke Color Order:
-  #d70206
-  #f05b4f
-  #f4c63d
-  #d17905
-  #453d3f
-  #59922b
-  #0544d3
-  #6b0392
+  #4f46e5
+  #06b6d4
+  #f59e0b
+  #ec4899
+  #10b981
+  #8b5cf6
+  #ef4444
+  #14b8a6
 */
 
 .total-criteria-8 .ct-series line:nth-of-type(8),
@@ -369,7 +730,7 @@ input.related {
 .total-criteria-3 .ct-series line:nth-of-type(3),
 .total-criteria-2 .ct-series line:nth-of-type(2),
 .total-criteria-1 .ct-series line:nth-of-type(1) {
-  stroke: #d70206;
+  stroke: #4f46e5;
 }
 .total-criteria-8 .ct-series line:nth-of-type(7),
 .total-criteria-7 .ct-series line:nth-of-type(6),
@@ -378,7 +739,7 @@ input.related {
 .total-criteria-4 .ct-series line:nth-of-type(3),
 .total-criteria-3 .ct-series line:nth-of-type(2),
 .total-criteria-2 .ct-series line:nth-of-type(1) {
-  stroke: #f05b4f;
+  stroke: #06b6d4;
 }
 .total-criteria-8 .ct-series line:nth-of-type(6),
 .total-criteria-7 .ct-series line:nth-of-type(5),
@@ -386,32 +747,32 @@ input.related {
 .total-criteria-5 .ct-series line:nth-of-type(3),
 .total-criteria-4 .ct-series line:nth-of-type(2),
 .total-criteria-3 .ct-series line:nth-of-type(1) {
-  stroke: #f4c63d;
+  stroke: #f59e0b;
 }
 .total-criteria-8 .ct-series line:nth-of-type(5),
 .total-criteria-7 .ct-series line:nth-of-type(4),
 .total-criteria-6 .ct-series line:nth-of-type(3),
 .total-criteria-5 .ct-series line:nth-of-type(2),
 .total-criteria-4 .ct-series line:nth-of-type(1) {
-  stroke: #d17905;
+  stroke: #ec4899;
 }
 .total-criteria-8 .ct-series line:nth-of-type(4),
 .total-criteria-7 .ct-series line:nth-of-type(3),
 .total-criteria-6 .ct-series line:nth-of-type(2),
 .total-criteria-5 .ct-series line:nth-of-type(1) {
-  stroke: #453d3f;
+  stroke: #10b981;
 }
 .total-criteria-8 .ct-series line:nth-of-type(3),
 .total-criteria-7 .ct-series line:nth-of-type(2),
 .total-criteria-6 .ct-series line:nth-of-type(1) {
-  stroke: #59922b;
+  stroke: #8b5cf6;
 }
 .total-criteria-8 .ct-series line:nth-of-type(2),
 .total-criteria-7 .ct-series line:nth-of-type(1) {
-  stroke: #0544d3;
+  stroke: #ef4444;
 }
 .total-criteria-8 .ct-series line:nth-of-type(1) {
-  stroke: #6b0392;
+  stroke: #14b8a6;
 }
 
 /* ==========================================================================
@@ -419,29 +780,19 @@ input.related {
    ========================================================================== */
 
 @media only screen and (min-width: 768px) {
-
-/* ====================
-  WIDE: CSS3 Effects
-   ==================== */
-
-  .header-container,
-  .main > aside {
-    -webkit-box-shadow: 0 5px 10px #aaa;
-       -moz-box-shadow: 0 5px 10px #aaa;
-        box-shadow: 0 5px 10px #aaa;
-  }
-
-/* ============
-  WIDE: Main
-   ============ */
-
-  .main > aside {
-    float: right;
-    width: 28%;
-  }
-
   textarea#goal {
-    width: 57%;
+    width: 60%;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .main > aside {
+    width: 100%;
+    flex: none;
   }
 }
 
